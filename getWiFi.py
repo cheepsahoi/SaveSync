@@ -1,4 +1,7 @@
-# Get WiFI SSID
+# This program checks the user's operating system through using the command
+# 'ls'. If it runs, user likely have Linux or MacOS. Else, probably Windows"
+
+
 import subprocess
 
 def getSystemOS():
@@ -33,13 +36,6 @@ def WifiSSID(SystemOS):
             if "SSID" in line:
                 ssid = line.split(":")[1].strip()
                 print(ssid)
-
-        # import wlanapi
-        # print("wlanapi imported. Press enter.")
-        # wlan = wlanapi.WLANAPI()
-        # interface_guid = wlan.get_interface_guid()
-        # current_network = wlan.get_current_network(interface_guid)
-        # ssid = current_network.get("ssid")
 
 
 WifiSSID(getSystemOS())
