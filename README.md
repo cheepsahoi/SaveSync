@@ -1,2 +1,2 @@
 # SaveSync
-Sync saves from local games outside of game launchers
+Sync saves from strategically-acquired games outside of game launchers
