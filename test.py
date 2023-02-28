@@ -33,6 +33,10 @@ class DownloadGUI:
         self.status_label = tk.Label(master, text="")
         self.status_label.grid(row=4, column=1, padx=5, pady=5)
     
+    # Ask user what game to determine the URL to use
+    def getUrl(self):
+
+
     def download_files(self):
         url = self.url_entry.get()
         save_location = self.save_entry.get()
@@ -67,21 +71,26 @@ class DownloadGUI:
         self.status_label.config(text="All files downloaded to " + save_location)
     
     def upload_files(self):
-        url = self.url_entry.get() + '/upload'
-        file_paths = filedialog.askopenfilenames(title="Select files to upload")
-        if len(file_paths) == 0:
-            self.status_label.config(text="No files selected")
-            return
-        
+        #url = self.url_entry.get() + '/upload'
+        url = 'http://46.232.211.40:9911/upload' #tmp
+        #save_location = self.save_entry.get()
+        save_location = '/Users/rob/Downloads/http_download' #tmp
         self.status_label.config(text="Uploading files to " + url)
         
-        # Upload each file
-        for file_path in file_paths:
-            file_name = os.path.basename(file_path)
-            file_url = os.path.join(url, file_name)
-            with open(file_path, 'rb') as file:
-                response = urllib.request.urlopen(file_url, file.read())
-        
+        # Upload each file in save location
+        files = []
+        for file_name in os.listdir(save_location):
+            file_path = os.path.join(save_location, file_name)
+            print("Current file: " + file_path) #tmp
+            if os.path.isfile(file_path):
+                #file_url = os.path.join(url, file_name)
+                files.append(str("-F files=@" + file_path)) #tmp
+                #print(files) #tmp
+                #input("Paused.")#tmp
+                #with open(file_path, 'rb') as file:
+                #    response = urllib.request.urlopen(file_url, file.read())
+        files = " ".join(files)
+        os.system("curl -X POST " + url + " " + files)
         self.status_label.config(text="All files uploaded to " + url)
 
 root = tk.Tk()
