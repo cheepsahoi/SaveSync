@@ -3,6 +3,7 @@ import urllib.request
 import os
 import re
 from tkinter import filedialog
+import platform
 
 class DownloadGUI:
     def __init__(self, master, names):
@@ -46,6 +47,11 @@ class DownloadGUI:
         # Create status label
         self.status_label = tk.Label(master, text="")
         self.status_label.grid(row=6, column=1, padx=5, pady=5)
+
+        # Debug label
+        self.debug_label = tk.Label(master, text="")
+        self.debug_label.grid(row=7, column=1, padx=5, pady=5)
+
     def select_game(self, event):
         # Get index of selected item
         index = self.listbox.curselection()
@@ -57,9 +63,22 @@ class DownloadGUI:
         else:
             self.game = -1
             self.status_label.config(text="No game selected")
-    
+
+    def get_systemOs(self):
+        if platform.system() == "Windows":
+            self.platform = "windows"
+            self.debug_label.config(text="Test OS")
+        elif platform.system() == "Linux":
+            self.platform = "linux"
+            self.debug_label.config(text="Test OS")
+        elif platform.system() == "Darwin":
+            self.platform = "macos"
+            self.debug_label.config(text="Test OS")
+        else:
+            self.debug_label.config(text="Operating system not detected.")
+
     def get_saveLocation(self):
-        
+        pass #Placeholder
 
     def download_files(self):
         save_location = self.save_entry.get()
