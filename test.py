@@ -52,6 +52,19 @@ class DownloadGUI:
         self.debug_label = tk.Label(master, text="")
         self.debug_label.grid(row=7, column=1, padx=5, pady=5)
 
+        # Get systemOS
+        self.current_directory = os.path.dirname(os.path.abspath(__file__))
+        if platform.system() == "Windows":
+            self.platform = "windows"
+        elif platform.system() == "Linux":
+            self.platform = "linux"
+        elif platform.system() == "Darwin":
+            self.platform = "macos"
+        else:
+            self.platform = "unknown"
+            self.debug_label.config(text="Operating system not detected.")
+        self.debug_label.config(text=self.current_directory)
+
     def select_game(self, event):
         # Get index of selected item
         index = self.listbox.curselection()
@@ -64,21 +77,8 @@ class DownloadGUI:
             self.game = -1
             self.status_label.config(text="No game selected")
 
-    def get_systemOs(self):
-        if platform.system() == "Windows":
-            self.platform = "windows"
-            self.debug_label.config(text="Test OS")
-        elif platform.system() == "Linux":
-            self.platform = "linux"
-            self.debug_label.config(text="Test OS")
-        elif platform.system() == "Darwin":
-            self.platform = "macos"
-            self.debug_label.config(text="Test OS")
-        else:
-            self.debug_label.config(text="Operating system not detected.")
-
     def get_saveLocation(self):
-        pass #Placeholder
+        pass
 
     def download_files(self):
         save_location = self.save_entry.get()
@@ -133,7 +133,3 @@ root = tk.Tk()
 names = ["Hogwarts Legacy", "Spider-Man", "Red Dead Redemption", "David"]
 download_gui = DownloadGUI(root, names)
 root.mainloop()
-
-# Get index of selected game
-game_index = name_list_gui.game
-print(f"Selected game index: {game_index}")
