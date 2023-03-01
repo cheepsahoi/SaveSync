@@ -46,7 +46,6 @@ class DownloadGUI:
         # Create status label
         self.status_label = tk.Label(master, text="")
         self.status_label.grid(row=6, column=1, padx=5, pady=5)
-
     def select_game(self, event):
         # Get index of selected item
         index = self.listbox.curselection()
@@ -58,6 +57,9 @@ class DownloadGUI:
         else:
             self.game = -1
             self.status_label.config(text="No game selected")
+    
+    def get_saveLocation(self):
+        
 
     def download_files(self):
         save_location = self.save_entry.get()
