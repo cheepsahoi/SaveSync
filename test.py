@@ -5,31 +5,45 @@ import re
 from tkinter import filedialog
 
 class DownloadGUI:
-    def __init__(self, master):
+    def __init__(self, master, names):
         self.master = master
         master.title("Sync Saves")
+
+        # Create list box for games
+        self.list_label = tk.Label(master, text="Games")
+        self.list_label.grid(row=0, column=1, pady=5)
+        self.listbox = tk.Listbox(master)
+        self.listbox.grid(row=1, column=1, padx=5)
         
-        # Create Save location input box
-        self.save_label = tk.Label(master, text="Enter save location:")
-        self.save_label.grid(row=1, column=0, sticky="w")
-        self.save_entry = tk.Entry(master, width=50)
-        self.save_entry.grid(row=1, column=1, padx=5, pady=5)
-        
-        # Create Download button
-        self.download_button = tk.Button(master, text="Download Files", command=self.download_files)
-        self.download_button.grid(row=2, column=1, padx=5, pady=5)
-        
-        # Create Upload button
-        self.upload_button = tk.Button(master, text="Upload Files", command=self.upload_files)
-        self.upload_button.grid(row=3, column=1, padx=5, pady=5)
+        # Add games to list box
+        for i, name in enumerate(names):
+            self.listbox.insert(i+1, f"{i+1}. {name}")
         
         # Create status label
         self.status_label = tk.Label(master, text="")
-        self.status_label.grid(row=4, column=1, padx=5, pady=5)
+        self.status_label.grid(row=1, column=0, padx=5, pady=5)
+
+        # Create Save location input box
+        self.save_label = tk.Label(master, text="Enter save location:")
+        self.save_label.grid(row=2, column=1, pady=5)
+        self.save_entry = tk.Entry(master, width=50)
+        self.save_entry.grid(row=3, column=1, padx=5, pady=5)
+        
+        # Create Download button
+        self.download_button = tk.Button(master, text="Download Saves", command=self.download_files)
+        self.download_button.grid(row=4, column=1, padx=5, pady=5)
+        
+        # Create Upload button
+        self.upload_button = tk.Button(master, text="Upload Saves", command=self.upload_files)
+        self.upload_button.grid(row=5, column=1, padx=5, pady=5)
+        
+        # Create status label
+        self.status_label = tk.Label(master, text="")
+        self.status_label.grid(row=6, column=1, padx=5, pady=5)
 
     def download_files(self):
         save_location = self.save_entry.get()
-        self.status_label.config(text="Downloading files from " + url)
+        self.status_label.config(text="Downloading saves from " + url)
         
         # Make request to URL
         try:
@@ -77,5 +91,6 @@ class DownloadGUI:
         self.status_label.config(text="All files uploaded to " + uploadUrl)
 
 root = tk.Tk()
-download_gui = DownloadGUI(root)
+names = ["Hogwarts Legacy", "Spider-Man", "Red Dead Redemption", "David"]
+download_gui = DownloadGUI(root, names)
 root.mainloop()
