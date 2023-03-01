@@ -19,6 +19,12 @@ class DownloadGUI:
         for i, name in enumerate(names):
             self.listbox.insert(i+1, f"{i+1}. {name}")
         
+        # Bind click event to list box
+        self.listbox.bind("<Button-1>", self.select_game)
+        
+        # Initialize game index to -1
+        self.game = -1
+
         # Create status label
         self.status_label = tk.Label(master, text="")
         self.status_label.grid(row=1, column=0, padx=5, pady=5)
@@ -40,6 +46,18 @@ class DownloadGUI:
         # Create status label
         self.status_label = tk.Label(master, text="")
         self.status_label.grid(row=6, column=1, padx=5, pady=5)
+
+    def select_game(self, event):
+        # Get index of selected item
+        index = self.listbox.curselection()
+        
+        # Store index in game variable
+        if len(index) > 0:
+            self.game = index[0]
+            self.status_label.config(text=f"Selected game: {self.listbox.get(self.game)}")
+        else:
+            self.game = -1
+            self.status_label.config(text="No game selected")
 
     def download_files(self):
         save_location = self.save_entry.get()
@@ -94,3 +112,7 @@ root = tk.Tk()
 names = ["Hogwarts Legacy", "Spider-Man", "Red Dead Redemption", "David"]
 download_gui = DownloadGUI(root, names)
 root.mainloop()
+
+# Get index of selected game
+game_index = name_list_gui.game
+print(f"Selected game index: {game_index}")
