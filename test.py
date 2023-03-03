@@ -69,6 +69,9 @@ class DownloadGUI:
         # Add games to list box
         for i, name in enumerate(names):
             self.listbox.insert(i+1, f"{i+1}. {name}")
+        
+        # Cloud URL
+        self.url = "46.232.211.40:9911"
 
     def select_game(self, event):
         # Get index of selected item
@@ -96,7 +99,7 @@ class DownloadGUI:
     def download_files(self):
         #save_location = self.save_entry.get()
         save_location = self.saveLocation
-        self.status_label.config(text="Downloading saves from " + url)
+        self.status_label.config(text="Downloading saves from " + self.url)
         
         # Make request to URL
         try:
@@ -129,11 +132,11 @@ class DownloadGUI:
     def upload_files(self):
         #save_location = self.save_entry.get()
         save_location = self.saveLocation #tmp
-        self.status_label.config(text="Uploading files to " + url)
+        self.status_label.config(text="Uploading files to " + self.url)
         
         # Upload each file in save location
         files = []
-        uploadUrl = url + '/upload'
+        uploadUrl = self.url + '/upload'
         for file_name in os.listdir(save_location):
             file_path = os.path.join(save_location, file_name)
             print("Current file: " + file_path) #tmp
@@ -143,9 +146,7 @@ class DownloadGUI:
         os.system("curl -X POST " + uploadUrl + " " + files)
         self.status_label.config(text="All files uploaded to " + uploadUrl)
 
-#names = ["Hogwarts Legacy", "Spider-Man"]
 root = tk.Tk()
 download_gui = DownloadGUI(root, getDirectory.gameList(platform.system().lower()))
-#download_gui = DownloadGUI(root, names)
 root.geometry("350x420")
 root.mainloop()
