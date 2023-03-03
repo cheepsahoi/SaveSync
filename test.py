@@ -14,12 +14,8 @@ class DownloadGUI:
         # Create list box for games
         self.list_label = tk.Label(master, text="Games")
         self.list_label.grid(row=0, column=1, pady=5)
-        self.listbox = tk.Listbox(master)
+        self.listbox = tk.Listbox(master, width=50)
         self.listbox.grid(row=1, column=1, padx=5)
-        
-        # Add games to list box
-        for i, name in enumerate(names):
-            self.listbox.insert(i+1, f"{i+1}. {name}")
         
         # Bind click event to list box
         self.listbox.bind("<Button-1>", self.select_game)
@@ -31,18 +27,18 @@ class DownloadGUI:
         self.status_label = tk.Label(master, text="")
         self.status_label.grid(row=1, column=0, padx=5, pady=5)
 
-        # Create Save location input box
-        self.save_label = tk.Label(master, text="Enter save location:")
+        # Create Save location label
+        self.save_label = tk.Label(master, text="Local location:")
         self.save_label.grid(row=2, column=1, pady=5)
-        self.save_entry = tk.Entry(master, width=50)
-        self.save_entry.grid(row=3, column=1, padx=5, pady=5)
+        self.save_localDir = tk.Label(master, text="")
+        self.save_localDir.grid(row=3, column=1, padx=5, pady=5)
         
         # Create Download button
-        self.download_button = tk.Button(master, text="Download Saves", command=self.download_files)
+        self.download_button = tk.Button(master, text="Download Saves", state="disabled", command=self.download_files)
         self.download_button.grid(row=4, column=1, padx=5, pady=5)
         
         # Create Upload button
-        self.upload_button = tk.Button(master, text="Upload Saves", command=self.upload_files)
+        self.upload_button = tk.Button(master, text="Upload Saves", state="disabled", command=self.upload_files)
         self.upload_button.grid(row=5, column=1, padx=5, pady=5)
         
         # Create status label
@@ -61,11 +57,18 @@ class DownloadGUI:
             self.platform = "linux"
         elif platform.system() == "Darwin":
             self.platform = "macos"
-            self.debug_label.config(text="MacOS not supported.")
+            self.debug_label.config(text="MacOS not supported. Press enter to exit")
+            #self.listbox.delete(0, 'end')
+            #input("Press enter to exit")
+            #exit()
         else:
             self.platform = "unknown"
             self.debug_label.config(text="Operating system not detected.")
         self.debug_label.config(text=self.current_directory)
+
+        # Add games to list box
+        for i, name in enumerate(names):
+            self.listbox.insert(i+1, f"{i+1}. {name}")
 
     def select_game(self, event):
         # Get index of selected item
@@ -75,15 +78,24 @@ class DownloadGUI:
         if len(index) > 0:
             self.game = index[0]
             self.status_label.config(text=f"Selected game: {self.listbox.get(self.game)}")
+            # Get save location using getDirectory.py script
+            self.saveLocation = getDirectory.getDirectory(self.platform, str(os.getenv("USER") or os.getlogin()), self.listbox.get(self.game)[3:])
+            self.save_localDir.config(text=self.saveLocation)
+            if self.saveLocation == "Not found":
+                self.save_localDir.config(text="Save directory doesn't exist. Play game and save first.")
+                self.download_button.config(state="disabled")
+                self.upload_button.config(state="disabled")
+            else:
+                self.save_localDir.config(text="Save directory found")
+                self.download_button.config(state="normal")
+                self.upload_button.config(state="normal")
         else:
             self.game = -1
             self.status_label.config(text="No game selected")
 
-    def get_saveLocation(self):
-        pass
-
     def download_files(self):
-        save_location = self.save_entry.get()
+        #save_location = self.save_entry.get()
+        save_location = self.saveLocation
         self.status_label.config(text="Downloading saves from " + url)
         
         # Make request to URL
@@ -115,8 +127,8 @@ class DownloadGUI:
         self.status_label.config(text="All files downloaded to " + save_location)
     
     def upload_files(self):
-        save_location = self.save_entry.get()
-        save_location = '/Users/rob/Downloads/http_download' #tmp
+        #save_location = self.save_entry.get()
+        save_location = self.saveLocation #tmp
         self.status_label.config(text="Uploading files to " + url)
         
         # Upload each file in save location
@@ -131,9 +143,9 @@ class DownloadGUI:
         os.system("curl -X POST " + uploadUrl + " " + files)
         self.status_label.config(text="All files uploaded to " + uploadUrl)
 
-test = getDirectory.getDirectory("macos", "rob", "Test Game")
-print(test)
-#root = tk.Tk()
-#names = ["Hogwarts Legacy", "Spider-Man", "Red Dead Redemption", "David"]
+#names = ["Hogwarts Legacy", "Spider-Man"]
+root = tk.Tk()
+download_gui = DownloadGUI(root, getDirectory.gameList(platform.system().lower()))
 #download_gui = DownloadGUI(root, names)
-#root.mainloop()
+root.geometry("350x420")
+root.mainloop()

@@ -1,5 +1,6 @@
 import os
 import json
+import platform
 
 def getDirectory(systemOS, username, game):
     if systemOS == "windows":
@@ -13,6 +14,7 @@ def getDirectory(systemOS, username, game):
             tempDictionary = file.read()
     saveDictionary = json.loads(tempDictionary)
     directory = findFilePath(systemOS, username, game, saveDictionary)
+    file.close()
     return directory
 
 def findFilePath(systemOS, username, game, saveDictionary):
@@ -30,9 +32,30 @@ def findFilePath(systemOS, username, game, saveDictionary):
             directory = os.listdir(path)[0] + "/"
             file_path += path + directory
         except:
-            print("Game: " + game)
+            print(systemOS)
+            print(username)
+            print(game)
+            print(saveDictionary)
+            print("Game: " + game + " directory not found")
             file_path = "Not found"
 
     return file_path
 
-print(getDirectory("macos", "rob", "Test Game"))
+def gameList(systemOS):
+    if systemOS == "windows":
+        with open(os.getcwd() + "\\save_locs\\windows") as file:
+            tempDictionary = file.read()
+    elif systemOS == "linux":
+        with open(os.getcwd() + "/save_locs/windows") as file:
+            tempDictionary = file.read()
+    elif systemOS == "macos" or systemOS == "darwin":
+        with open(os.getcwd() + "/save_locs/windows") as file:
+            tempDictionary = file.read()
+            print(tempDictionary)
+    saveDictionary = json.loads(tempDictionary)
+    file.close()
+    return list(saveDictionary)
+
+#path, list = getDirectory("macos", "rob", "Spider-Man")
+#print(path, list)
+#print(getDirectory("windows", "rob", "Hogwarts Legacy"))
