@@ -131,8 +131,9 @@ class DownloadGUI:
         os.system("curl -X POST " + uploadUrl + " " + files)
         self.status_label.config(text="All files uploaded to " + uploadUrl)
 
-root = tk.Tk()
-names = ["Hogwarts Legacy", "Spider-Man", "Red Dead Redemption", "David"]
-download_gui = DownloadGUI(root, names)
-root.mainloop()
-print(getDirectory.getPrint())
+test = getDirectory.getDirectory("macos", "rob", "Test Game")
+print(test)
+#root = tk.Tk()
+#names = ["Hogwarts Legacy", "Spider-Man", "Red Dead Redemption", "David"]
+#download_gui = DownloadGUI(root, names)
+#root.mainloop()
