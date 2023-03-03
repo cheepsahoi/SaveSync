@@ -60,6 +60,7 @@ class DownloadGUI:
             self.platform = "linux"
         elif platform.system() == "Darwin":
             self.platform = "macos"
+            self.debug_label.config(text="MacOS not supported.")
         else:
             self.platform = "unknown"
             self.debug_label.config(text="Operating system not detected.")
