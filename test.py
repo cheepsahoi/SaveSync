@@ -4,6 +4,7 @@ import os
 import re
 from tkinter import filedialog
 import platform
+import getDirectory
 
 class DownloadGUI:
     def __init__(self, master, names):
@@ -134,3 +135,4 @@ root = tk.Tk()
 names = ["Hogwarts Legacy", "Spider-Man", "Red Dead Redemption", "David"]
 download_gui = DownloadGUI(root, names)
 root.mainloop()
+print(getDirectory.getPrint())

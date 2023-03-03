@@ -1,14 +1,21 @@
 import os
 import json
 
-with open(os.getcwd() + "/save_locs/windows") as file:
-    tempDictionary = file.read()
-
-saveDictionary = json.loads(tempDictionary)
-
-systemOS = "windows"
+systemOS = "macos"
 username = "rob"
 game = "Hogwarts Legacy"
+
+if systemOS == "windows":
+    with open(os.getcwd() + "\\save_locs\\windows") as file:
+        tempDictionary = file.read()
+elif systemOS == "linux":
+    with open(os.getcwd() + "/save_locs/linux") as file:
+        tempDictionary = file.read()
+elif systemOS == "macos":
+    with open(os.getcwd() + "/save_locs/windows") as file:
+        tempDictionary = file.read()
+
+saveDictionary = json.loads(tempDictionary)
 
 def getDirectory(dictionary, systemOS, username, game):
     file_path = ""
@@ -20,5 +27,9 @@ def getDirectory(dictionary, systemOS, username, game):
         except:
             file_path = "Not found"
     return file_path
+
+def getPrint():
+    print("Test")
         
 print(getDirectory(saveDictionary, systemOS, username, game))
+file.close()
