@@ -103,7 +103,7 @@ class DownloadGUI:
         
         # Make request to URL
         try:
-            response = urllib.request.urlopen(url)
+            response = urllib.request.urlopen(self.url)
             html = response.read().decode('utf-8')
         except:
             self.status_label.config(text="Error connecting to server")
