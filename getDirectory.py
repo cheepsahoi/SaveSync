@@ -1,23 +1,24 @@
 import os
+import json
+
+with open(os.getcwd() + "/save_locs/windows") as file:
+    tempDictionary = file.read()
+
+saveDictionary = json.loads(tempDictionary)
 
 systemOS = "windows"
 username = "rob"
-game = "Test Game"
-testDictionary = {"Hogwarts Legacy": "C:\\Users\\USERNAME\\AppData\\Local\\Phoenix\\Saved\\SaveGames\\",
-                  "Spider-Man": "/Users/USERNAME/Downloads/http_download",
-                  "Test Game": "/Users/USERNAME/Nextcloud/Repos/SaveSync/temp"}
+game = "Hogwarts Legacy"
 
-def getDirectory(systemOS, username, game):
+def getDirectory(dictionary, systemOS, username, game):
     file_path = ""
     if systemOS == "windows":
-        path = testDictionary[game].replace("USERNAME", username)
+        path = dictionary[game].replace("USERNAME", username)
         try:
-            directory = os.listdir(path)[0] + "/"
-            file_path += path + "/" + directory
-            print(file_path)
+            directory = os.listdir(path)[0] + "\\"
+            file_path += path + directory
         except:
-            print("Not found")
+            file_path = "Not found"
+    return file_path
         
-#print(testDictionary[game].replace("USERNAME", username))
-#os.listdir(testDictionary[game].replace("USERNAME", username))
-getDirectory(systemOS, username, game)
+print(getDirectory(saveDictionary, systemOS, username, game))
