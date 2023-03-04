@@ -123,7 +123,7 @@ class DownloadGUI:
         
         # Download each file
         for link in links:
-            file_url = url + link
+            file_url = self.url + link
             file_name = os.path.join(save_location, link)
             urllib.request.urlretrieve(file_url, file_name)
         
