@@ -71,7 +71,7 @@ class DownloadGUI:
             self.listbox.insert(i+1, f"{i+1}. {name}")
         
         # Cloud URL
-        self.url = "46.232.211.40:9911"
+        self.url = "http://46.232.211.40:9911/"
 
     def select_game(self, event):
         # Get index of selected item
@@ -136,7 +136,7 @@ class DownloadGUI:
         
         # Upload each file in save location
         files = []
-        uploadUrl = self.url + '/upload'
+        uploadUrl = self.url + 'upload'
         for file_name in os.listdir(save_location):
             file_path = os.path.join(save_location, file_name)
             print("Current file: " + file_path) #tmp
