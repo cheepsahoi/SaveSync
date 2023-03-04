@@ -79,21 +79,17 @@ class DownloadGUI:
         # Store index in game variable
         if len(index) > 0:
             self.game = index[0]
-            self.status_label.config(text=f"Selected game: {self.listbox.get(self.game)}")
+            self.status_label.config(text=f"Selected game: {self.listbox.get(self.game)[3:]}")
             # Get save location using getDirectory.py script
-            try:
-                self.saveLocation = getDirectory.getDirectory(self.platform, str(os.getenv("USER") or os.getlogin()), self.listbox.get(self.game)[3:])
-                self.game = self.listbox.get(self.game)[3:]
-                self.save_localDir.config(text=self.saveLocation)
+            self.saveLocation = getDirectory.getDirectory(self.platform, str(os.getenv("USER") or os.getlogin()), self.listbox.get(self.game)[3:])
+            self.game = self.listbox.get(self.game)[3:]
+            self.save_localDir.config(text=self.saveLocation)
+            if self.saveLocation != "Not found":
                 self.save_localDir.config(text="Save directory found")
                 self.download_button.config(state="normal")
                 self.upload_button.config(state="normal")
-            except FileNotFoundError:
-                self.save_localDir.config(text="Save directory doesn't exist. Play game and save first.")
-                self.download_button.config(state="disabled")
-                self.upload_button.config(state="disabled")
-            except:
-                self.save_localDir.config(text="Something went wrong. Check logs.")
+            else:
+                self.save_localDir.config(text="Save directory doesn't exist. Play game and save first")
                 self.download_button.config(state="disabled")
                 self.upload_button.config(state="disabled")
         else:
