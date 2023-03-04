@@ -1,8 +1,6 @@
 import ftplib
 import os
 
-#game = "Hogwarts Legacy"
-#saves_path = os.getcwd() + "/saves"
 ftp_address = ""
 ftp_port = 0
 
