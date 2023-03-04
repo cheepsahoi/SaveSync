@@ -1,8 +1,8 @@
 import ftplib
 import os
 
-game = "Hogwarts Legacy"
-saves_path = os.getcwd() + "/saves"
+#game = "Hogwarts Legacy"
+#saves_path = os.getcwd() + "/saves"
 ftp_address = "46.232.211.40"
 ftp_port = 9991
 
@@ -103,5 +103,3 @@ def uploadFiles(game, saves_path):
     # Close FTP connection
     print("Closing FTP connection")
     ftp.quit()
-
-downloadFiles(game, saves_path)

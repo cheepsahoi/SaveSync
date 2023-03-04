@@ -4,7 +4,7 @@ import os
 import re
 from tkinter import filedialog
 import platform
-import getDirectory
+import getDirectory, ftp
 
 class DownloadGUI:
     def __init__(self, master, names):
@@ -69,9 +69,7 @@ class DownloadGUI:
         # Add games to list box
         for i, name in enumerate(names):
             self.listbox.insert(i+1, f"{i+1}. {name}")
-        
-        # Cloud URL
-        self.url = "http://46.232.211.40:9911/"
+
 
     def select_game(self, event):
         # Get index of selected item
@@ -83,6 +81,7 @@ class DownloadGUI:
             self.status_label.config(text=f"Selected game: {self.listbox.get(self.game)}")
             # Get save location using getDirectory.py script
             self.saveLocation = getDirectory.getDirectory(self.platform, str(os.getenv("USER") or os.getlogin()), self.listbox.get(self.game)[3:])
+            self.game = self.listbox.get(self.game)[3:]
             self.save_localDir.config(text=self.saveLocation)
             if self.saveLocation == "Not found":
                 self.save_localDir.config(text="Save directory doesn't exist. Play game and save first.")
@@ -97,54 +96,62 @@ class DownloadGUI:
             self.status_label.config(text="No game selected")
 
     def download_files(self):
-        #save_location = self.save_entry.get()
         save_location = self.saveLocation
-        self.status_label.config(text="Downloading saves from " + self.url)
+        self.status_label.config(text="Downloading saves from remote folder")
         
-        # Make request to URL
-        try:
-            response = urllib.request.urlopen(self.url)
-            html = response.read().decode('utf-8')
-        except:
-            self.status_label.config(text="Error connecting to server")
-            return
+        # Download files using ftp.py script
+        ftp.downloadFiles(self.game, save_location)
+        print("Download finished")
+        self.status_label.config(text="All files downloaded")
+
+        # # Make request to URL
+        # try:
+        #     response = urllib.request.urlopen(self.url)
+        #     html = response.read().decode('utf-8')
+        # except:
+        #     self.status_label.config(text="Error connecting to server")
+        #     return
         
-        # Find all links on the page
-        links = re.findall(r'href=[\'"]?([^\'" >]+)', html)
+        # # Find all links on the page
+        # links = re.findall(r'href=[\'"]?([^\'" >]+)', html)
         
-        # Delete any existing files in the save location
-        for file_name in os.listdir(save_location):
-            file_path = os.path.join(save_location, file_name)
-            try:
-                if os.path.isfile(file_path):
-                    os.unlink(file_path)
-            except Exception as e:
-                print(e)
+        # # Delete any existing files in the save location
+        # for file_name in os.listdir(save_location):
+        #     file_path = os.path.join(save_location, file_name)
+        #     try:
+        #         if os.path.isfile(file_path):
+        #             os.unlink(file_path)
+        #     except Exception as e:
+        #         print(e)
         
-        # Download each file
-        for link in links:
-            file_url = self.url + link
-            file_name = os.path.join(save_location, link)
-            urllib.request.urlretrieve(file_url, file_name)
+        # # Download each file
+        # for link in links:
+        #     file_url = self.url + link
+        #     file_name = os.path.join(save_location, link)
+        #     urllib.request.urlretrieve(file_url, file_name)
         
-        self.status_label.config(text="All files downloaded to " + save_location)
+        # self.status_label.config(text="All files downloaded to " + save_location)
     
     def upload_files(self):
-        #save_location = self.save_entry.get()
         save_location = self.saveLocation #tmp
-        self.status_label.config(text="Uploading files to " + self.url)
+        self.status_label.config(text="Uploading files to remote folder")
         
-        # Upload each file in save location
-        files = []
-        uploadUrl = self.url + 'upload'
-        for file_name in os.listdir(save_location):
-            file_path = os.path.join(save_location, file_name)
-            print("Current file: " + file_path) #tmp
-            if os.path.isfile(file_path):
-                files.append(str("-F files=@" + file_path))
-        files = " ".join(files)
-        os.system("curl -X POST " + uploadUrl + " " + files)
-        self.status_label.config(text="All files uploaded to " + uploadUrl)
+        # Upload files using ftp.py script
+        ftp.uploadFiles(self.game, save_location)
+        print("Upload finished")
+        self.status_label.config(text="All files uploaded")
+
+        # # Upload each file in save location
+        # files = []
+        # uploadUrl = self.url + 'upload'
+        # for file_name in os.listdir(save_location):
+        #     file_path = os.path.join(save_location, file_name)
+        #     print("Current file: " + file_path) #tmp
+        #     if os.path.isfile(file_path):
+        #         files.append(str("-F files=@" + file_path))
+        # files = " ".join(files)
+        # os.system("curl -X POST " + uploadUrl + " " + files)
+        # self.status_label.config(text="All files uploaded to " + uploadUrl)
 
 root = tk.Tk()
 download_gui = DownloadGUI(root, getDirectory.gameList(platform.system().lower()))
