@@ -32,10 +32,6 @@ def findFilePath(systemOS, username, game, saveDictionary):
             directory = os.listdir(path)[0] + "/"
             file_path += path + directory
         except:
-            print(systemOS)
-            print(username)
-            print(game)
-            print(saveDictionary)
             print("Game: " + game + " directory not found")
             file_path = "Not found"
 
@@ -51,7 +47,6 @@ def gameList(systemOS):
     elif systemOS == "macos" or systemOS == "darwin":
         with open(os.getcwd() + "/save_locs/windows") as file:
             tempDictionary = file.read()
-            print(tempDictionary)
     saveDictionary = json.loads(tempDictionary)
     file.close()
     return list(saveDictionary)

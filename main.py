@@ -49,6 +49,10 @@ class DownloadGUI:
         self.debug_label = tk.Label(master, text="")
         self.debug_label.grid(row=7, column=1, padx=5, pady=5)
 
+        # Add games to list box
+        for i, name in enumerate(names):
+            self.listbox.insert(i+1, f"{i+1}. {name}")
+
         # Get systemOS
         self.current_directory = os.path.dirname(os.path.abspath(__file__))
         if platform.system() == "Windows":
@@ -57,18 +61,15 @@ class DownloadGUI:
             self.platform = "linux"
         elif platform.system() == "Darwin":
             self.platform = "macos"
-            self.debug_label.config(text="MacOS not supported. Press enter to exit")
-            #self.listbox.delete(0, 'end')
-            #input("Press enter to exit")
+            self.debug_label.config(text="MacOS not supported")
+            self.save_label.config(text="MacOS not supported")
+            self.listbox.delete(0, 'end')
+            input("MacOS not supported")
             #exit()
         else:
             self.platform = "unknown"
             self.debug_label.config(text="Operating system not detected.")
         self.debug_label.config(text=self.current_directory)
-
-        # Add games to list box
-        for i, name in enumerate(names):
-            self.listbox.insert(i+1, f"{i+1}. {name}")
 
 
     def select_game(self, event):
