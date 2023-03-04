@@ -26,7 +26,7 @@ def downloadFiles(game, saves_path):
         ftp.cwd(game)
         directoryList = ftp.nlst()
     except:
-        print("Directory do not exist. Create folder in remote location first")
+        print("Remote directory do not exist. No save available")
         exit()
 
     # For each file in ftp directory, download it
