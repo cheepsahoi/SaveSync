@@ -74,10 +74,15 @@ def uploadFiles(game, saves_path):
     # Change directory to game's remote directory
     print("Opening FTP game directory")
     try:
-        ftp.cwd(game)
+        if game in ftp.nlst():
+            ftp.cwd(game)
+        else:
+            ftp.mkd(game)
+            ftp.cwd(game)
     except:
-        print("Directory do not exist. Create folder in remote location first")
+        print("Something went wrong")
         exit()
+
     # For each file in local directory, upload it
     print("Upload files from local directory for " + game)
     for file in os.listdir():
