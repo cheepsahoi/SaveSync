@@ -3,8 +3,8 @@ import os
 
 #game = "Hogwarts Legacy"
 #saves_path = os.getcwd() + "/saves"
-ftp_address = "46.232.211.40"
-ftp_port = 9991
+ftp_address = ""
+ftp_port = 0
 
 def downloadFiles(game, saves_path):
     # Go to game's save directory
